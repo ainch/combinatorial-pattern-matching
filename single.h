@@ -24,6 +24,9 @@ namespace pattern {
 				}
 			}
 		}
+		std::vector < int > get_fail(){
+			return this->fail;
+		}
 		std::vector < int > find() {
 			std::vector < int > re;
 			size_t j = 0;

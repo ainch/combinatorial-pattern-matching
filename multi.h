@@ -1,13 +1,11 @@
 #ifndef MULTI_H
 #define MULTI_H
+#include <cstdio>
 #include <vector>
-#include <string>
 #include <queue>
-#include <functional>
-#include <algorithm>
-
+#include <iostream>
 #include <cassert>
-
+#include <functional>
 namespace pattern {
 	template < unsigned int ALPHA >
 	class static_trie_node {
@@ -95,7 +93,6 @@ namespace pattern {
 					++id;
 				}
 			}
-			printf("id : %d\n", id);
 		}
 		void make_fail() {
 			std::queue < int > qu;
@@ -170,4 +167,5 @@ namespace pattern {
 		}
 	};
 }
+
 #endif
