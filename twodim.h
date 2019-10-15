@@ -26,6 +26,38 @@ namespace pattern {
 		{
 		
 		}
+		bool match(int tx1, int ty1){
+			for(size_t i=0;i<pat.size();i++){
+				for(size_t j=0;j<pat[0].size();j++){
+					if(text[tx1+i][ty1+j] != pat[i][j]){
+						return false;
+					}
+				}
+			}
+			return true;
+		}
+		bool checker(const std::vector < std::pair < int, int > > &candidate){
+			using ii = std::pair < int, int >;
+			std::vector < std::pair < int, int > > real_answer;
+			for(size_t i=pat.size()-1;i<text.size();i++){
+				for(size_t j=pat[0].size()-1;j<text[i].size();j++){
+					if(match(i - pat.size() + 1,j - pat[0].size() + 1)){
+						real_answer.push_back(ii(i,j));
+					}
+				}
+			}	
+			if(candidate.size() == real_answer.size()){
+				for(size_t i=0;i<candidate.size();i++){
+					if(candidate[i] != real_answer[i]){
+						return false;
+					}
+				}
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
 		std::vector < std::pair < int, int > > find() {
 			using ii = std::pair < int, int >;
 			
@@ -39,17 +71,7 @@ namespace pattern {
 			const int text_col = text[0].size();
 		
 			std::vector < int > fail;
-/*
-			size_t j = 0;
-			for (size_t i = 1; i < pat.size(); i++) {
-				while (j > 0 && pat[i] != pat[j]) {
-					j = fail[j - 1];
-				}
-				if (pat[i] == pat[j]) {
-					fail[i] = ++j;
-				}
-			}
-*/
+
 			fail.resize(labels.size());
 			size_t j = 0;
 			for (size_t i = 1; i < labels.size(); i++) {
@@ -84,24 +106,6 @@ namespace pattern {
 						}	
 					}
 				}
-				/*
-				std::vector < int > re;
-				size_t j = 0;
-				for (size_t i = 0; i < text.size(); i++) {
-					while (j > 0 && text[i] != pat[j]) {
-						j = fail[j - 1];
-					}
-					if (text[i] == pat[j]) {
-						if (j == pat.size() - 1) {
-							re.push_back(i - pat.size() + 1);
-							j = fail[j];
-						}
-						else {
-							++j;
-						}
-					}
-				}
-				*/
 			}
 			return re;
 		}
