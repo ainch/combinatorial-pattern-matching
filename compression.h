@@ -58,7 +58,7 @@ namespace pattern {
 			int node = root;
 			size_t left_pos = start_pos;
 			size_t right_pos = start_pos;
-			
+		
 			while(
 				right_pos < input.length() && 
 				trie[node][encoding(input[right_pos])] != -1 
@@ -67,9 +67,11 @@ namespace pattern {
 				node = trie[node][encoding(input[right_pos])];
 				++right_pos;
 			}
+			
+			//printf("%d %d\n", left_pos, right_pos);
 	
 			if(right_pos == input.length()){
-				compressed_vec.push_back(ic(node, '#'));
+				compressed_vec.push_back(ic(node, decoding(0)));
 			}
 			else{
 				compressed_vec.push_back(ic(node, input[right_pos]));
@@ -78,6 +80,7 @@ namespace pattern {
 			}
 
 			start_pos = right_pos;
+			//puts("");
 		}
 
 		return compressed_vec;
@@ -117,7 +120,7 @@ namespace pattern {
 		for(auto &p : code){
 			int node = p.first;
 			char next_char = p.second;
-			std::cout << node << " " << next_char << '\n'; 
+			//std::cout << node << " " << next_char << '\n'; 
 		}
 
 		//[2]
@@ -139,6 +142,9 @@ namespace pattern {
 			//[1] : decode string
 			auto s = get_trie_path(trie, parent, label, decoding, node);
 			string_decoded += s;
+			if( next_char == '#' ) {
+				break;
+			}
 
 			//[2] : insert new 
 			int new_node = trie.size();
@@ -156,8 +162,4 @@ namespace pattern {
 }
 
 #endif
-
-
-
-
 
