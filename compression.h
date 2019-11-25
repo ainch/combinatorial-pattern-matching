@@ -19,6 +19,17 @@ namespace pattern {
 		return 'a' + z;
 	}
 
+	std::vector < std::vector < int > > 
+	make_initial_trie (size_t alpha_num){
+		std::vector < std::vector < int > > trie;
+		trie.push_back(std::vector < int > (alpha_num));
+		for(size_t alpha = 0; alpha < alpha_num; alpha++){
+			trie[0][alpha] = alpha + 1;
+			trie.push_back(std::vector < int > (alpha_num, -1));
+		}
+		return trie;
+	}
+
 	std::vector < ic > lzw_encode ( 
 		const std::string &input,
 		const std::function < int (char) > &encoding = default_encoding,	
@@ -36,12 +47,8 @@ namespace pattern {
 
 		//[1] input single alphabets in the trie
 		const size_t root = 0;
-		std::vector < std::vector < int > > trie;
-		trie.push_back(std::vector < int > (alpha_num));
-		for(size_t alpha = 0; alpha < alpha_num; alpha++){
-			trie[0][alpha] = alpha + 1;
-			trie.push_back(std::vector < int > (alpha_num, -1));
-		}
+		std::vector < std::vector < int > > trie
+				= make_initial_trie(alpha_num);
 
 		//[2] compression 
 		size_t start_pos = 0;
@@ -89,7 +96,6 @@ namespace pattern {
 		int alpha_num = 26
 	)
 	{
-		printf("%d\n", code.size());
 		for(auto &p : code){
 			int node = p.first;
 			char next_char = p.second;
