@@ -68,8 +68,6 @@ namespace pattern {
 				++right_pos;
 			}
 	
-			//printf("%d %d\n", (int)left_pos, (int)right_pos);
-
 			if(right_pos == input.length()){
 				compressed_vec.push_back(ic(node, '#'));
 			}
@@ -89,6 +87,25 @@ namespace pattern {
 		
 	}
 
+	std::string
+	get_trie_path (
+		const std::vector < std::vector < int > > &trie,
+		const std::vector < int > parent,
+		const std::vector < int > label,
+		const std::function < char (int) > &decoding,
+		int node,
+		const int root = 0
+	)
+	{
+		std::string path;
+		while(node!=root){
+			path += decoding(label[node]);
+			node = parent[node];
+		}
+		std::reverse(path.begin(), path.end());
+		return path;
+	}
+
 	std::string lzw_decode (
 		std::vector < ic > &code,
 		const std::function < int (char) > &encoding = default_encoding,	
@@ -96,18 +113,50 @@ namespace pattern {
 		int alpha_num = 26
 	)
 	{
+		//[1]
 		for(auto &p : code){
 			int node = p.first;
 			char next_char = p.second;
 			std::cout << node << " " << next_char << '\n'; 
 		}
 
+		//[2]
+		std::vector < std::vector < int > > trie;
+		trie = make_initial_trie(alpha_num);
+
+		std::vector < int > parent(alpha_num + 1);
+		std::vector < int > label(alpha_num + 1);
+		for(int i=0;i<=alpha_num;i++){
+			label[i+1] = i;
+		}
+
 		std::string string_decoded;
+
+		for(auto &p : code){
+			int node = p.first;
+			char next_char = p.second;
+			
+			//[1] : decode string
+			auto s = get_trie_path(trie, parent, label, decoding, node);
+			string_decoded += s;
+
+			//[2] : insert new 
+			int new_node = trie.size();
+
+			parent.push_back(node);
+			
+			trie[node][encoding(next_char)] = new_node;
+			trie.push_back(std::vector < int > (alpha_num, -1));
+			
+			label.push_back(encoding(next_char));
+		}
+		
 		return string_decoded;
 	}
 }
 
 #endif
+
 
 
 
