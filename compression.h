@@ -43,12 +43,12 @@ namespace pattern {
 			trie.push_back(std::vector < int > (alpha_num, -1));
 		}
 
-		//[2] 
+		//[2] compression 
 		size_t start_pos = 0;
 		
 		while(start_pos < input.length()){
 			
-			size_t node = root;
+			int node = root;
 			size_t left_pos = start_pos;
 			size_t right_pos = start_pos;
 			
@@ -67,7 +67,7 @@ namespace pattern {
 				compressed_vec.push_back(ic(node, '#'));
 			}
 			else{
-				compressed_vec.push_back(ic(node, encoding(input[right_pos])));
+				compressed_vec.push_back(ic(node, input[right_pos]));
 				trie[node][encoding(input[right_pos])] = trie.size();
 				trie.push_back(std::vector < int > (alpha_num, -1 ));
 			}
@@ -79,7 +79,7 @@ namespace pattern {
 	}
 
 	void make_encoding_file(){
-
+		
 	}
 
 	std::string lzw_decode (
@@ -89,31 +89,19 @@ namespace pattern {
 		int alpha_num = 26
 	)
 	{
-			
+		printf("%d\n", code.size());
+		for(auto &p : code){
+			int node = p.first;
+			char next_char = p.second;
+			std::cout << node << " " << next_char << '\n'; 
+		}
+
+		std::string string_decoded;
+		return string_decoded;
 	}
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
